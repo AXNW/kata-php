@@ -6,41 +6,36 @@ namespace TennisGame;
 
 class TennisGame3 implements TennisGame
 {
-    private int $player2Points = 0;
+    private int $p2 = 0;
 
-    private int $player1Points = 0;
-
-    private array $pointsNames = ['Love', 'Fifteen', 'Thirty', 'Forty'];
+    private int $p1 = 0;
 
     public function __construct(
-        private string $player1Name,
-        private string $player2Name
+        private string $p1N,
+        private string $p2N
     ) {
     }
 
     public function getScore(): string
     {
-        $isEndgame = ! ($this->player1Points < 4 && $this->player2Points < 4 && ! ($this->player1Points + $this->player2Points === 6));
-        if (! $isEndgame) {
-            $score = $this->pointsNames[$this->player1Points];
-
-            return $this->player1Points === $this->player2Points ? "{$score}-All" : "{$score}-{$this->pointsNames[$this->player2Points]}";
+        if ($this->p1 < 4 && $this->p2 < 4 && ! ($this->p1 + $this->p2 === 6)) {
+            $p = ['Love', 'Fifteen', 'Thirty', 'Forty'];
+            $s = $p[$this->p1];
+            return ($this->p1 === $this->p2) ? "{$s}-All" : "{$s}-{$p[$this->p2]}";
         }
-        if ($this->player1Points === $this->player2Points) {
+        if ($this->p1 === $this->p2) {
             return 'Deuce';
         }
-        $leader = $this->player1Points > $this->player2Points ? $this->player1Name : $this->player2Name;
-        $isAdvantage = ($this->player1Points - $this->player2Points) * ($this->player1Points - $this->player2Points) === 1;
-
-        return $isAdvantage ? "Advantage {$leader}" : "Win for {$leader}";
+        $s = $this->p1 > $this->p2 ? $this->p1N : $this->p2N;
+        return (($this->p1 - $this->p2) * ($this->p1 - $this->p2) === 1) ? "Advantage {$s}" : "Win for {$s}";
     }
 
     public function wonPoint(string $playerName): void
     {
         if ($playerName === 'player1') {
-            $this->player1Points++;
+            $this->p1++;
         } else {
-            $this->player2Points++;
+            $this->p2++;
         }
     }
 }
